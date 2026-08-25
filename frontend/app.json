@@ -12,8 +12,12 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.emergent.slicerprofilesuite.yk7f6m",
       "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
         "NSLocalNetworkUsageDescription": "Slicer Companion uses your local network to discover and communicate with 3D printers running OctoPrint or Moonraker.",
-        "NSBonjourServices": ["_octoprint._tcp", "_moonraker._tcp"],
+        "NSBonjourServices": [
+          "_octoprint._tcp",
+          "_moonraker._tcp"
+        ],
         "NSPrivacyTracking": false,
         "NSPrivacyTrackingDomains": [],
         "NSPrivacyCollectedDataTypes": [
@@ -21,17 +25,23 @@
             "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeOtherUserContent",
             "NSPrivacyCollectedDataTypeLinked": false,
             "NSPrivacyCollectedDataTypeTracking": false,
-            "NSPrivacyCollectedDataTypePurposes": ["NSPrivacyCollectedDataTypePurposeAppFunctionality"]
+            "NSPrivacyCollectedDataTypePurposes": [
+              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+            ]
           }
         ],
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
-            "NSPrivacyAccessedAPITypeReasons": ["C617.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "C617.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryDiskSpace",
-            "NSPrivacyAccessedAPITypeReasons": ["E174.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "E174.1"
+            ]
           }
         ]
       }
@@ -63,6 +73,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "93e0e448-2ed6-4d3a-bd0f-d1d10da2b013"
+      }
+    },
+    "owner": "gamerdud56"
   }
 }
