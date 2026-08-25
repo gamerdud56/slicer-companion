@@ -7,6 +7,7 @@ import {
   ScrollView,
   TextInput,
   ActivityIndicator,
+  Alert,
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,7 +21,7 @@ import { useRouter } from 'expo-router';
 import { useTheme } from '@/src/theme/ThemeContext';
 import { SPACING, RADIUS, typography, MONO } from '@/src/theme/tokens';
 import { useAppState } from '@/src/state/AppState';
-import { api } from '@/src/api/client';
+import { api, NetworkError } from '@/src/api/client';
 
 type Tool = 'move' | 'scale' | 'rotate';
 
@@ -223,6 +224,11 @@ export default function Workspace() {
       } else {
         form.append('file', { uri: asset.uri, name: asset.name || 'model.stl', type: 'application/sla' } as any);
       }
+      const Network = await import('expo-network');
+      const net = await Network.getNetworkStateAsync();
+      if (!net.isConnected || !net.isInternetReachable) {
+        throw new NetworkError();
+      }
       const r = await fetch(`${api.base}/api/models/upload`, { method: 'POST', body: form });
       if (!r.ok) {
         const t = await r.text();
@@ -233,7 +239,10 @@ export default function Workspace() {
       setActiveModel(doc.id);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     } catch (e: any) {
-      console.warn('upload failed', e?.message);
+      const msg = e instanceof NetworkError
+        ? e.message
+        : `Upload failed: ${e?.message || 'Unknown error'}`;
+      Alert.alert('Error', msg);
     } finally {
       setUploading(false);
     }
