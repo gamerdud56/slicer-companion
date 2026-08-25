@@ -7,8 +7,8 @@ import { useTheme } from '@/src/theme/ThemeContext';
 import { SPACING, RADIUS, typography, MONO } from '@/src/theme/tokens';
 import { useAppState } from '@/src/state/AppState';
 
-const PRIVACY_POLICY_URL = 'https://slicercompanion.app/privacy';
-const TERMS_URL = 'https://slicercompanion.app/terms';
+const PRIVACY_POLICY_URL = 'https://gamerdud56.github.io/slicer-companion/privacy.html';
+const TERMS_URL = 'https://gamerdud56.github.io/slicer-companion/terms.html';
 
 export default function Settings() {
   const { colors, mode, toggle } = useTheme();
