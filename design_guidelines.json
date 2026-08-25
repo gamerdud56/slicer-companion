@@ -1,0 +1,188 @@
+{
+  "app_name": "SlicerCompanion",
+  "personality": "1 iOS-Native Clean (Variant: Mono fonts for numbers, sans-serif for UI)",
+  "personality_one_liner": "A highly functional, precision-first operational utility that balances the clarity of iOS-native interfaces with the engineering rigor of a 3D slicing environment.",
+  "color": {
+    "surface": "#F6F5F2",
+    "onSurface": "#1A1A1A",
+    "surfaceSecondary": "#FFFFFF",
+    "onSurfaceSecondary": "#4A4A4A",
+    "surfaceTertiary": "#EFECE7",
+    "onSurfaceTertiary": "#1A1A1A",
+    "surfaceInverse": "#1A1A1A",
+    "onSurfaceInverse": "#F6F5F2",
+    "brand": "#F56B00",
+    "brandPrimary": "#F56B00",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#FFDBC2",
+    "onBrandSecondary": "#C45600",
+    "brandTertiary": "#FFF0E5",
+    "onBrandTertiary": "#F56B00",
+    "success": "#34C759",
+    "onSuccess": "#FFFFFF",
+    "warning": "#FFCC00",
+    "onWarning": "#1A1A1A",
+    "error": "#FF3B30",
+    "onError": "#FFFFFF",
+    "info": "#3A3A3C",
+    "onInfo": "#FFFFFF",
+    "border": "#E5E5EA",
+    "borderStrong": "#C7C7CC",
+    "divider": "#E5E5EA",
+    "dark": {
+      "surface": "#121212",
+      "onSurface": "#EDEDED",
+      "surfaceSecondary": "#1E1E1E",
+      "onSurfaceSecondary": "#A0A0A0",
+      "surfaceTertiary": "#2C2C2E",
+      "onSurfaceTertiary": "#EDEDED",
+      "surfaceInverse": "#EDEDED",
+      "onSurfaceInverse": "#121212",
+      "brand": "#F56B00",
+      "brandPrimary": "#F56B00",
+      "onBrandPrimary": "#FFFFFF",
+      "brandSecondary": "#3D1A00",
+      "onBrandSecondary": "#FF9955",
+      "brandTertiary": "#291100",
+      "onBrandTertiary": "#FF9955",
+      "success": "#30D158",
+      "onSuccess": "#000000",
+      "warning": "#FFD60A",
+      "onWarning": "#000000",
+      "error": "#FF453A",
+      "onError": "#FFFFFF",
+      "info": "#8E8E93",
+      "onInfo": "#FFFFFF",
+      "border": "#38383A",
+      "borderStrong": "#48484A",
+      "divider": "#38383A"
+    }
+  },
+  "typography": {
+    "displayFontFamily": "Space Mono",
+    "textFontFamily": "Plus Jakarta Sans",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Generous vertical breathing room for settings. Compact horizontal spacing in the 3D workspace for transform tools to avoid occluding the model.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": 1,
+  "navigation": "bottom_tabs",
+  "icon_set": "Phosphor",
+  "glassmorphism": {
+    "enabled": true,
+    "do's": [
+      "Use heavily in the 3D Viewer screen for floating transform tools, accordion menus, and bottom sheets so the STL model remains visible beneath the UI.",
+      "Bottom tab bar and sticky headers.",
+      "Print progress overlay widgets."
+    ],
+    "dont's": [
+      "Settings and Profile lists (keep these solid surfaceSecondary for clarity)."
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-blur",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Workspace (3D Viewer)",
+      "purpose": "The core tool for uploading STL files, manipulating them, and slicing them.",
+      "states": {
+        "loading": "Centered spinner over the 3D canvas with mono-font loading percentage.",
+        "empty": "A 3D isometric empty bed grid illustration, a short sentence ('Import an STL to begin'), and an 'Upload Model' primary CTA.",
+        "error": "Readable message about slicing/render failure + Retry button."
+      },
+      "layout": "Full-bleed 3D viewport (using expo-gl/three or webview). The transform tools (Move, Scale, Rotate) sit in a floating glassmorphic bottom sheet or accordion panel. The panel includes sliders and direct mono-font text inputs for exact coordinate entry (X, Y, Z). Dedicated pill toggles for 'Snap' and 'Uniform' sit right above the transform sliders. A primary 'Slice' CTA is anchored at the bottom right. When slicing finishes, a vertical slider appears on the right edge to scrub through G-Code layers visually."
+    },
+    {
+      "name": "Print Settings",
+      "purpose": "Configure all parameters for the slicing process.",
+      "states": {
+        "loading": "Standard spinner.",
+        "empty": "N/A - Settings always have default values.",
+        "error": "Error loading profile + Retry."
+      },
+      "layout": "iOS-native grouped list architecture (Accordion style). Sections: Quality (Layer Height, Initial Layer), Shell, Infill (Density slider, Pattern), Speed, Temperature (Nozzle, Bed). Numeric values MUST use the mono font (Space Mono). Inputs should be combinations of steppers, sliders, and direct text input. Includes a 'Save to Profile' sticky button at the bottom."
+    },
+    {
+      "name": "Printers (Discovery & Profiles)",
+      "purpose": "Manage connected printers, discover new ones via IP, and select printer profiles.",
+      "states": {
+        "loading": "Skeleton list of printer cards.",
+        "empty": "Illustration of a printer, 'No printers found', 'Add Manually' CTA.",
+        "error": "Failed network discovery message + Retry."
+      },
+      "layout": "Grid of 2 columns or full-width cards. Each card displays the printer name, current state (Idle/Printing), and bed size. A 'Discover via WiFi' section scans the local network. A manual 'Add via IP' flow is a separate sheet. Uses OctoPrint API for connectivity."
+    },
+    {
+      "name": "Filament Profiles",
+      "purpose": "Manage material settings (PLA, ABS, PETG, Custom).",
+      "states": {
+        "loading": "Spinner.",
+        "empty": "'No custom filaments', 'Create Profile' CTA.",
+        "error": "Error message + Retry."
+      },
+      "layout": "Simple list view. Each row shows the filament type, brand/color, and key temps (Nozzle/Bed) in a right-aligned mono-font badge. Tapping a row opens a detail sheet to edit extrusion multiplier, cooling fan speed, and exact temperatures."
+    }
+  ],
+  "images": {
+    "printer_empty_state": {
+      "url": "https://images.pexels.com/photos/30658383/pexels-photo-30658383.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "dark": "https://images.unsplash.com/photo-1642969164999-979483e21601?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzJ8MHwxfHNlYXJjaHwxfHwzZCUyMHByaW50ZXIlMjBwcmludGluZ3xlbnwwfHx8fDE3ODc2MDc1Njh8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "A 3D printer for empty states and onboarding"
+    },
+    "filament_hero": {
+      "url": "https://images.pexels.com/photos/31336838/pexels-photo-31336838.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "alt": "Filament spools for the filament profiles header"
+    },
+    "abstract_geometric_bg": {
+      "url": "https://images.unsplash.com/photo-1486551937199-baf066858de7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzV8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMHRlY2huaWNhbCUyMGdlb21ldHJpYyUyMHBhdHRlcm58ZW58MHx8fHwxNzg3NjA3NTY4fDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Abstract geometric pattern for background depth"
+    }
+  },
+  "haptics": {
+    "slider_scrub": "selection",
+    "transform_snap": "medium",
+    "toggle_uniform_scale": "light",
+    "save_profile": "success",
+    "slice_start": "medium",
+    "slice_complete": "success"
+  },
+  "instructions_to_main_agent": [
+    "CRITICAL: Adhere to the iOS-Native Clean variant by using 'Space Mono' strictly for all numeric readouts, coordinates, temperatures, layer heights, and sliders. Use 'Plus Jakarta Sans' for all standard UI labels, buttons, and body text.",
+    "CRITICAL: The Workspace screen (3D Viewer) must use 'expo-blur' for the transform tools (Move, Scale, Rotate) so that the user can still see the model behind the UI controls.",
+    "Ensure both Light and Dark modes are implemented. Dark mode should feel like a 'command center' using #121212 as the base, whereas Light mode should feel clean and engineering-focused using #F6F5F2.",
+    "Implement the 'Snap' and 'Uniform' toggles in the transform panel as pill-shaped buttons that change background color (to brandPrimary) when active.",
+    "For the Print Settings screen, use an accordion-style or iOS grouped-list layout to avoid overwhelming the user with parameters. Group them logically (Quality, Infill, Temp, etc.).",
+    "When fetching or testing 3D viewers in React Native, ensure touch events on the sliders don't accidentally orbit the 3D camera. You may need to disable orbit controls while a slider/bottom-sheet is being interacted with.",
+    "Never use Indigo, Blue, or Purple. Stick to the provided Signal Orange (#F56B00) accent and grayscale/neutral colors."
+  ]
+}

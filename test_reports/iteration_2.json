@@ -1,0 +1,42 @@
+{
+  "summary": "Full re-test of Slicer Companion (Iteration 2) after this-session adds: Moonraker connection, filament pricing (price_per_kg + spool_weight_g), estimated_cost in slice, model library strip, iframe 3D viewer on web, compact workspace toolbar. Backend: 21/21 pytest tests PASS (8 new + 13 existing regression). Frontend (390x844 mobile viewport): iframe 3D viewer renders orange cube correctly (no 'WebView not supported' text), model library strip visible (7 chips), Move/Scale/Rotate + Snap all fit inside 390px viewport (Snap right edge = 378px, NOT cut off), Uniform toggle appears when Scale selected, OctoPrint + Moonraker (Klipper) type chips present, moonraker changes host placeholder to include :7125 and API Key label becomes '(optional)', saving a moonraker printer shows 'MR 10.255.255.1:7125' on card, filament card subtitles show '$X/kg', edit modal has 'Price per kg ($)' and 'Spool weight (g)' inputs and price edits persist, Slicer stats row shows 'COST' with $ value (verified $0.02 for cube).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {"component": "workspace.tsx / react-native-web", "issue": "Persistent console warning: 'props.pointerEvents is deprecated. Use style.pointerEvents'. Non-blocking. Same as Iteration 1. Likely from a library dependency (react-native-svg/react-native-webview), not from app code directly — grep of /app/frontend/app and /app/frontend/src returned no pointerEvents prop usage."}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_slicer_api.py",
+    "/app/backend/tests/test_new_features.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "(Optional) The webview 'props.pointerEvents is deprecated' warning still shows in web preview. If it becomes noisy, upgrade the vendor lib that emits it or suppress via LogBox on web.",
+    "(Optional / minor) There are now 7 model chips (many duplicate cube.stl uploads accumulated across sessions). Consider adding a 'clear all uploads' or dedupe by filename+size — not blocking."
+  ],
+  "critical_code_review_comments": [
+    "server.py test-connection endpoint gracefully handles unreachable Moonraker/OctoPrint hosts (returns 200 with ok:false) — verified.",
+    "server.py POST /printers/print correctly branches upload URL by connection.type (moonraker -> /server/files/upload, else /api/files/local) and wraps requests.post in try/except returning ok:false on unreachable host — verified end-to-end.",
+    "estimated_cost formula: (filament_grams / 1000) * price_per_kg, rounded to 2dp — matches spec. Returns null when filament_profile_id not supplied — verified.",
+    "Startup seed idempotently migrates existing filaments missing price fields via update_many with $exists:false — good.",
+    "server.py still uses deprecated @app.on_event startup/shutdown (FastAPI recommends lifespan). Not blocking for MVP.",
+    "workspace.tsx web branch uses React.createElement('iframe', { srcDoc: ... }) — renders correctly and receives postMessage via iframeRef.current.contentWindow.postMessage. Verified visually (cube rendered).",
+    "workspace.tsx toolRow has flexWrap:'wrap' with a flex:1 spacer pushing Snap right — Snap fits in 390px (measured 378px right edge). No overflow."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_new_features.py (new — pricing/moonraker/print-job tests)"
+  ],
+  "success_rate": {"backend": "100% (21/21)", "frontend": "100% of the 9 reviewed flows"},
+  "seed_data_creation": "None persisted. All test data (TEST_PricedFil filament, TEST_MRPrinter printer, TestMRUI printer) was cleaned up after tests. Only regression noise: multiple cube.stl uploads already existed from prior sessions (not created by this run).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All new features (Moonraker, filament pricing, estimated_cost, iframe 3D viewer, compact toolbar, MR label, filament price/spool inputs, Slicer Cost stat) are working end-to-end on both backend and web preview. The only persistent minor issue is a react-native-web deprecation warning ('props.pointerEvents') that does NOT come from app source (verified via grep) — it originates from a transitive dependency. Safe to hand back to user.",
+  "rca_of_issue": "N/A — no defects found in this iteration."
+}
